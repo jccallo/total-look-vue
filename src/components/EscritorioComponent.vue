@@ -9,7 +9,7 @@
 
                <!-- Brand -->
                <a class="navbar-brand" href="index.html">
-                  <b>TOTAL-LOOK</b>
+                  <h5>Total<span class="text-success"><i class="bi bi-emoji-heart-eyes-fill"></i>LOOK</span></h5>
                </a>
 
                <!-- Toggler/collapsibe Button -->
@@ -30,17 +30,17 @@
                            <i class="bi bi-tools"></i> Mantenimientos
                         </a>
                         <div class="dropdown-menu mb-3">
-                           <router-link :to="{ name: 'indexRol'}" class="dropdown-item">
+                           <router-link :to="{ name: 'index-rol'}" class="dropdown-item">
                               <i class="bi bi-sliders"></i> Roles
                            </router-link>
-                           <router-link :to="{ name: 'empleados'}" class="dropdown-item">
+                           <router-link :to="{ name: 'index-empleado'}" class="dropdown-item">
                               <i class="bi bi-sliders"></i> Empleados
                            </router-link>
                         </div>
                      </li>
                      <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-capitalize" href="" data-toggle="dropdown">
-                           <i class="bi bi-person-fill"></i> Armando Morales <span class="badge badge-success">Admin</span>
+                           <span class="badge badge-success">Admin</span> Armando Morales
                         </a>
                         <div class="dropdown-menu dropdown-menu-right mb-3">
                            <a class="dropdown-item" href="">

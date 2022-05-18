@@ -6,10 +6,15 @@ import HomeView from '../views/HomeView.vue'
 import EscritorioComponent from '@/components/EscritorioComponent.vue'
 import PortadaComponent from '@/components/PortadaComponent.vue'
 
+// roles
 import IndexRol from '@/components/roles/IndexRol.vue'
 import CreateRol from '@/components/roles/CreateRol.vue'
 import EditRol from '@/components/roles/EditRol.vue'
+
+// empleados
 import IndexEmpleado from '@/components/empleados/IndexEmpleado.vue'
+import CreateEmpleado from '@/components/empleados/CreateEmpleado.vue'
+import EditEmpleado from '@/components/empleados/EditEmpleado.vue'
 
 Vue.use(VueRouter)
 
@@ -38,27 +43,39 @@ const routes = [
           name: 'portada',
           component: PortadaComponent,
         },
+
         // roles
         {
           path: 'roles',
-          name: 'indexRol',
+          name: 'index-rol',
           component: IndexRol,
         },
         {
           path: 'roles/crear',
-          name: 'createRol',
+          name: 'create-rol',
           component: CreateRol,
         },
         {
           path: 'roles/:id',
-          name: 'editRol',
+          name: 'edit-rol',
           component: EditRol,
         },
+
         // empleados
         {
           path: 'empleados',
-          name: 'empleados',
+          name: 'index-empleado',
           component: IndexEmpleado,
+        },
+        {
+          path: 'empleados',
+          name: 'create-empleado',
+          component: CreateEmpleado,
+        },
+        {
+          path: 'empleados',
+          name: 'edit-empleado',
+          component: EditEmpleado,
         }
       ]
   },

@@ -3,18 +3,18 @@
     <!-- cabecera -->
     <div class="row align-items-center mb-2">
       <div class="col-sm-6 col-12">
-        <div class="h4">
+        <div class="h3">
           Roles
-          <small class="text-muted" style="font-size: 13px; font-weight: 500"
-            >Mostrando {{roles.length}} resultados en Total</small
+          <small class="text-muted" style="font-size: 14px; font-weight: 500"
+            >Mostrando {{ roles.length }} resultados en Total</small
           >
         </div>
       </div>
       <div class="col-sm-6 col-12">
         <div class="form-row form-inline justify-content-end">
           <div class="col-auto my-1">
-            <router-link :to="{ name: 'createRol'}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Registrar
+            <router-link :to="{ name: 'create-rol' }" class="btn btn-primary">
+              <i class="bi bi-plus-circle"></i> Registrar
             </router-link>
           </div>
         </div>
@@ -46,8 +46,8 @@
               <div class="col-sm-6 col-12">
                 <div class="form-row form-inline justify-content-end">
                   <div class="col-auto my-1">
-                    <button class="btn btn-outline-info btn-sm" href="#">
-                      <i class="bi bi-filter-circle-fill"></i> Filtrar
+                    <button class="btn btn-info btn-sm" href="#">
+                      <i class="bi bi-filter-circle"></i> Filtrar
                     </button>
                   </div>
                   <div class="col-auto my-1">
@@ -71,10 +71,10 @@
                 </div>
               </div>
             </div>
-            <table class="table table-borderless table-sm">
+            <table class="table table-borderless table-striped table-sm">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
+                  <th scope="col">Id</th>
                   <th scope="col">Nombre</th>
                   <th scope="col">Descripcion</th>
                   <th scope="col">Estado</th>
@@ -83,10 +83,10 @@
               </thead>
               <tbody>
                 <tr v-for="rol in roles" :key="rol.id">
-                  <th scope="row">{{rol.id}}</th>
-                  <td>{{rol.nombre}}</td>
-                  <td>{{rol.descripcion}}</td>
-                  <td>{{rol.estado}}</td>
+                  <th scope="row">{{ rol.id }}</th>
+                  <td>{{ rol.nombre }}</td>
+                  <td>{{ rol.descripcion }}</td>
+                  <td>{{ rol.estado }}</td>
                   <td class="text-right">
                     <div style="width: 105px; display: inline-block">
                       <!-- <a
@@ -94,7 +94,10 @@
                         class="btn btn-secondary btn-sm mr-1"
                         ><i class="bi bi-eye"></i
                       ></a> -->
-                      <router-link :to="{name: 'editRol', params:{id: rol.id}}" class="btn btn-primary btn-sm mr-1">
+                      <router-link
+                        :to="{ name: 'edit-rol', params: { id: rol.id } }"
+                        class="btn btn-primary btn-sm mr-1"
+                      >
                         <i class="bi bi-pencil"></i>
                       </router-link>
                       <a
@@ -128,8 +131,8 @@
               <div class="col-sm-6 col-12">
                 <div class="form-row form-inline justify-content-end">
                   <div class="col-auto my-1">
-                    <button class="btn btn-outline-info btn-sm" href="#">
-                      <i class="bi bi-filter-circle-fill"></i> Filtrar
+                    <button class="btn btn-info btn-sm" href="#">
+                      <i class="bi bi-filter-circle"></i> Filtrar
                     </button>
                   </div>
                   <div class="col-auto my-1">
@@ -161,46 +164,36 @@
 </template>
 
 <script>
+import roles from "@/logic/roles";
+
 export default {
   name: "IndexRol",
   data() {
     return {
-      roles: []
-    }
+      roles: [],
+    };
   },
-  created: function() {
-    this.indexRol()
+  mounted: function () {
+    this.indexRol();
   },
   methods: {
     indexRol() {
-      fetch('http://localhost:8000/api/roles')
-      .then(res => res.json())
-      .then(res => {
-        this.roles = res.roles
-      })
+      roles
+        .index()
+        .then((response) => (this.roles = response.roles))
+        .catch((response) => console.log(response));
     },
     deleteRol(id) {
-      console.log(id)
-      if(confirm("¿Realmente desea eliminar el registro")) 
-      {
-        fetch('http://localhost:8000/api/roles/' + id, {
-          method: 'DELETE',
-          headers: {
-            "Content-type": 'application/json',
-            "accept": 'application/json',
-          }
-        })
-        .then(res => res.json())
-        .then(res => {
-          if (res.res) {
-            console.log(res.msg)
-            this.indexRol()
-          }
-        }).catch(error => {
-          console.log(error)
-        })
+      if (confirm("¿Realmente desea eliminar el registro?")) {
+        roles
+          .delete(id)
+          .then((response) => {
+            console.log(response);
+            this.indexRol();
+          })
+          .catch((response) => console.log(response));
       }
-    }
-  }
+    },
+  },
 };
 </script>
