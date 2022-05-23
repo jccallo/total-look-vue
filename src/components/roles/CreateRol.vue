@@ -29,22 +29,21 @@
           <div class="card-body table-responsive">
             <form @submit.prevent="createRol">
               <div class="form-group">
-                <label for="subtotal">Nombre:</label>
-                <input type="text" class="form-control" v-model="rol.nombre" />
+                <label>Nombre:</label>
+                <input type="text" class="form-control" v-model="rol.nombre" required />
               </div>
               <div class="form-group">
-                <label for="envio">Descripcion</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="rol.descripcion"
-                />
+                <label>Descripcion</label>
+                <input type="text" class="form-control" v-model="rol.descripcion" required />
               </div>
               <div class="form-group">
-                <label for="descuento">Estado:</label>
-                <input type="text" class="form-control" v-model="rol.estado" />
+                <label>Estado:</label>
+                <select class="custom-select" v-model="rol.estado" required>
+                  <option value="activo">Activo</option>
+                  <option value="eliminado">Eliminado</option>
+                </select>
               </div>
-              <button type="submit" class="btn btn-success btn-block">
+              <button type="submit" class="btn btn-primary btn-block">
                 Guardar
               </button>
             </form>
@@ -62,7 +61,11 @@ export default {
   name: "CreateRol",
   data() {
     return {
-      rol: {},
+      rol: {
+        nombre: "",
+        descripcion: "",
+        estado: "activo",
+      },
     };
   },
   methods: {

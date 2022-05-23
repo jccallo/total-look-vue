@@ -46,7 +46,7 @@
               <div class="col-sm-6 col-12">
                 <div class="form-row form-inline justify-content-end">
                   <div class="col-auto my-1">
-                    <button class="btn btn-info btn-sm" href="#">
+                    <button class="btn btn-primary btn-sm" href="#">
                       <i class="bi bi-filter-circle"></i> Filtrar
                     </button>
                   </div>
@@ -89,11 +89,11 @@
                   <td>{{ rol.estado }}</td>
                   <td class="text-right">
                     <div style="width: 105px; display: inline-block">
-                      <!-- <a
-                        href="detalles.html"
+                      <router-link
+                        :to="{ name: 'show-rol', params: { id: rol.id } }"
                         class="btn btn-secondary btn-sm mr-1"
                         ><i class="bi bi-eye"></i
-                      ></a> -->
+                      ></router-link>
                       <router-link
                         :to="{ name: 'edit-rol', params: { id: rol.id } }"
                         class="btn btn-primary btn-sm mr-1"
@@ -102,8 +102,6 @@
                       </router-link>
                       <a
                         class="btn btn-danger btn-sm"
-                        data-toggle="modal"
-                        data-target="#myModal"
                         @click="deleteRol(rol.id)"
                         ><i class="bi bi-trash"></i
                       ></a>
@@ -131,7 +129,7 @@
               <div class="col-sm-6 col-12">
                 <div class="form-row form-inline justify-content-end">
                   <div class="col-auto my-1">
-                    <button class="btn btn-info btn-sm" href="#">
+                    <button class="btn btn-primary btn-sm" href="#">
                       <i class="bi bi-filter-circle"></i> Filtrar
                     </button>
                   </div>
@@ -160,6 +158,30 @@
         </div>
       </div>
     </div>
+
+    <!-- Button to Open the Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+      Open modal
+    </button> -->
+
+    <!-- The Modal -->
+    <!-- <div class="modal fade" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title"><span class="text-warning"><i class="bi bi-shield-fill-exclamation"></i></span> Alerta</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            ¿Realmente desea eliminar el registro?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Si, adelante</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div> -->
   </div>
 </template>
 

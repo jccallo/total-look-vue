@@ -13,7 +13,10 @@
       <div class="col-sm-6 col-12">
         <div class="form-row form-inline justify-content-end">
           <div class="col-auto my-1">
-            <router-link :to="{ name: 'create-empleado' }" class="btn btn-primary">
+            <router-link
+              :to="{ name: 'create-empleado' }"
+              class="btn btn-primary"
+            >
               <i class="bi bi-plus-circle"></i> Registrar
             </router-link>
           </div>
@@ -33,7 +36,11 @@
                   <div class="col-auto my-1">
                     <label
                       >Mostrando
-                      <select class="custom-select custom-select-sm mx-1">
+                      <select
+                        class="custom-select custom-select-sm mx-1"
+                        v-model="perPage"
+                      >
+                        <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -51,22 +58,7 @@
                     </button>
                   </div>
                   <div class="col-auto my-1">
-                    <ul
-                      class="pagination pagination-sm mb-0 justify-content-end"
-                    >
-                      <li class="page-item disabled">
-                        <a class="page-link" href="#">&laquo;</a>
-                      </li>
-                      <li class="page-item active">
-                        <a class="page-link" href="index.html">1</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="index-2.html">2</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="index-3.html">&raquo;</a>
-                      </li>
-                    </ul>
+                    <laravel-paginacion :pages="pages"></laravel-paginacion>
                   </div>
                 </div>
               </div>
@@ -92,7 +84,7 @@
                   <td>{{ empleado.dni }}</td>
                   <td>{{ empleado.telefono }}</td>
                   <td>{{ empleado.estado }}</td>
-                  <td>{{ empleado.rol_id }}</td>
+                  <td>{{ empleado.rol }}</td>
                   <td class="text-right">
                     <div style="width: 105px; display: inline-block">
                       <!-- <a
@@ -101,7 +93,10 @@
                         ><i class="bi bi-eye"></i
                       ></a> -->
                       <router-link
-                        :to="{ name: 'edit-empleado', params: { id: empleado.id } }"
+                        :to="{
+                          name: 'edit-empleado',
+                          params: { id: empleado.id },
+                        }"
                         class="btn btn-primary btn-sm mr-1"
                       >
                         <i class="bi bi-pencil"></i>
@@ -124,7 +119,11 @@
                   <div class="col-auto my-1">
                     <label
                       >Mostrando
-                      <select class="custom-select custom-select-sm mx-1">
+                      <select
+                        class="custom-select custom-select-sm mx-1"
+                        v-model="perPage"
+                      >
+                        <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -142,22 +141,7 @@
                     </button>
                   </div>
                   <div class="col-auto my-1">
-                    <ul
-                      class="pagination pagination-sm mb-0 justify-content-end"
-                    >
-                      <li class="page-item disabled">
-                        <a class="page-link" href="#">&laquo;</a>
-                      </li>
-                      <li class="page-item active">
-                        <a class="page-link" href="index.html">1</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="index-2.html">2</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="index-3.html">&raquo;</a>
-                      </li>
-                    </ul>
+                    <laravel-paginacion :pages="pages"></laravel-paginacion>
                   </div>
                 </div>
               </div>
@@ -170,36 +154,69 @@
 </template>
 
 <script>
-import empleados from "@/logic/empleados";
+import $sun from "@/logic/$sun";
+import LaravelPaginacion from "@/components/paginaciones/LaravelPaginacion";
 
 export default {
   name: "IndexEmpleado",
+  components: {
+    LaravelPaginacion,
+  },
   data() {
     return {
       empleados: [],
+      pages: [],
+      perPage: "5",
     };
   },
   mounted: function () {
-    this.indexEmpleado();
+    this.indexEmpleado(this.$route.query.page);
   },
   methods: {
-    indexEmpleado() {
-      empleados
-        .index()
-        .then((response) => (this.empleados = response.empleados))
+    indexEmpleado(page) {
+      console.log(
+        `http://localhost:8000/api/empleados/?perpage=${this.perPage}&page=${page}`
+      );
+      $sun
+        .ajax(
+          `http://localhost:8000/api/empleados/?perpage=${this.perPage}&page=${page}`
+        )
+        .then((response) => {
+          this.empleados = response.data;
+          this.pages = response.meta.links;
+          console.log(response);
+        })
         .catch((response) => console.log(response));
     },
     deleteEmpleado(id) {
       if (confirm("¿Realmente desea eliminar el registro?")) {
-        empleados
-          .delete(id)
+        $sun
+          .ajax(`http://localhost:8000/api/empleados/${id}`, "DELETE")
           .then((response) => {
+            this.indexEmpleado(this.$route.query.page);
             console.log(response);
-            this.indexEmpleado();
           })
           .catch((response) => console.log(response));
       }
     },
   },
+  watch: {
+    "$route.query.page": {
+      inmediate: true,
+      handler() {
+        this.indexEmpleado(this.$route.query.page);
+      },
+    },
+    perPage() {
+      if (this.$route.query.page == undefined) {
+        console.log(true)
+        this.indexEmpleado(1);
+      } else {
+        this.$router.push({ name: "index-empleado" });
+      }
+    },
+  },
 };
 </script>
+
+

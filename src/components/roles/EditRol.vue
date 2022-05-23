@@ -29,22 +29,25 @@
           <div class="card-body table-responsive">
             <form @submit.prevent="editRol">
               <div class="form-group">
-                <label for="subtotal">Nombre:</label>
-                <input type="text" class="form-control" v-model="rol.nombre" />
+                <label>Id:</label>
+                <input type="number" class="form-control" v-model="rol.id" readonly disabled />
               </div>
               <div class="form-group">
-                <label for="envio">Descripcion</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="rol.descripcion"
-                />
+                <label>Nombre:</label>
+                <input type="text" class="form-control" v-model="rol.nombre" required />
               </div>
               <div class="form-group">
-                <label for="descuento">Estado:</label>
-                <input type="text" class="form-control" v-model="rol.estado" />
+                <label>Descripcion:</label>
+                <input type="text" class="form-control" v-model="rol.descripcion" required />
               </div>
-              <button type="submit" class="btn btn-success btn-block">
+              <div class="form-group">
+                <label>Estado:</label>
+                <select class="custom-select" v-model="rol.estado" required>
+                  <option value="activo">Activo</option>
+                  <option value="eliminado">Eliminado</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
                 Actualizar
               </button>
             </form>
@@ -63,6 +66,7 @@ export default {
   data() {
     return {
       rol: {
+        id: "",
         nombre: "",
         descripcion: "",
         estado: "",

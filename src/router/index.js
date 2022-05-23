@@ -9,6 +9,7 @@ import PortadaComponent from '@/components/PortadaComponent.vue'
 // roles
 import IndexRol from '@/components/roles/IndexRol.vue'
 import CreateRol from '@/components/roles/CreateRol.vue'
+import ShowRol from '@/components/roles/ShowRol.vue'
 import EditRol from '@/components/roles/EditRol.vue'
 
 // empleados
@@ -56,7 +57,12 @@ const routes = [
           component: CreateRol,
         },
         {
-          path: 'roles/:id',
+          path: 'roles/:id/mostrar',
+          name: 'show-rol',
+          component: ShowRol,
+        },
+        {
+          path: 'roles/:id/editar',
           name: 'edit-rol',
           component: EditRol,
         },
@@ -73,7 +79,7 @@ const routes = [
           component: CreateEmpleado,
         },
         {
-          path: 'empleados',
+          path: 'empleados/:id/editar',
           name: 'edit-empleado',
           component: EditEmpleado,
         }
