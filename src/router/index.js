@@ -15,6 +15,7 @@ import EditRol from '@/components/roles/EditRol.vue'
 // empleados
 import IndexEmpleado from '@/components/empleados/IndexEmpleado.vue'
 import CreateEmpleado from '@/components/empleados/CreateEmpleado.vue'
+import ShowEmpleado from '@/components/empleados/ShowEmpleado.vue'
 import EditEmpleado from '@/components/empleados/EditEmpleado.vue'
 
 Vue.use(VueRouter)
@@ -74,9 +75,14 @@ const routes = [
           component: IndexEmpleado,
         },
         {
-          path: 'empleados',
+          path: 'empleados/crear',
           name: 'create-empleado',
           component: CreateEmpleado,
+        },
+        {
+          path: 'empleados/:id/mostrar',
+          name: 'show-empleado',
+          component: ShowEmpleado,
         },
         {
           path: 'empleados/:id/editar',

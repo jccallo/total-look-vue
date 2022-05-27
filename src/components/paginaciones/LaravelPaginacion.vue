@@ -9,7 +9,6 @@
       <router-link
         class="page-link"
         :to="{
-          name: 'index-empleado',
           query: { page: page.page ? page.page : 1 },
         }"
         >{{ page.label }}</router-link

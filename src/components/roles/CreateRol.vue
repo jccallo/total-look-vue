@@ -1,25 +1,7 @@
 <template>
   <div class="container">
     <!-- cabecera -->
-    <div class="row align-items-center mb-2">
-      <div class="col-sm-6 col-12">
-        <div class="h3">
-          Roles
-          <small class="text-muted" style="font-size: 14px; font-weight: 500"
-            >Registrar</small
-          >
-        </div>
-      </div>
-      <div class="col-sm-6 col-12">
-        <div class="form-row form-inline justify-content-end">
-          <div class="col-auto my-1">
-            <router-link :to="{ name: 'index-rol' }" class="nav-link">
-              <i class="bi bi-arrow-left-circle-fill"></i> Cancelar
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <show-header title='Roles' subtitle='Crear' name='index-rol'></show-header>
 
     <!-- cuerpo -->
     <div class="row">
@@ -55,10 +37,14 @@
 </template>
 
 <script>
-import roles from "@/logic/roles";
+import $sun from "@/logic/$sun";
+import ShowHeader from '@/components/layouts/ShowHeader.vue';
 
 export default {
   name: "CreateRol",
+  components: {
+    ShowHeader
+  },
   data() {
     return {
       rol: {
@@ -70,11 +56,11 @@ export default {
   },
   methods: {
     createRol() {
-      roles
-        .create(this.rol)
+      $sun
+        .ajax(`http://localhost:8000/api/roles`, "POST", this.rol)
         .then((response) => {
-          console.log(response);
           this.$router.push({ name: "index-rol" });
+          console.log(response);
         })
         .catch((response) => console.log(response));
     },

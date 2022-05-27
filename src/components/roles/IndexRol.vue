@@ -1,25 +1,7 @@
 <template>
   <div class="container">
     <!-- cabecera -->
-    <div class="row align-items-center mb-2">
-      <div class="col-sm-6 col-12">
-        <div class="h3">
-          Roles
-          <small class="text-muted" style="font-size: 14px; font-weight: 500"
-            >Mostrando {{ roles.length }} resultados en Total</small
-          >
-        </div>
-      </div>
-      <div class="col-sm-6 col-12">
-        <div class="form-row form-inline justify-content-end">
-          <div class="col-auto my-1">
-            <router-link :to="{ name: 'create-rol' }" class="btn btn-primary">
-              <i class="bi bi-plus-circle"></i> Registrar
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <index-header title="Roles" :total="total" name="create-rol"></index-header>
 
     <!-- cuerpo -->
     <div class="row">
@@ -33,7 +15,8 @@
                   <div class="col-auto my-1">
                     <label
                       >Mostrando
-                      <select class="custom-select custom-select-sm mx-1">
+                      <select class="custom-select custom-select-sm mx-1" v-model="perPage">
+                        <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -46,27 +29,7 @@
               <div class="col-sm-6 col-12">
                 <div class="form-row form-inline justify-content-end">
                   <div class="col-auto my-1">
-                    <button class="btn btn-primary btn-sm" href="#">
-                      <i class="bi bi-filter-circle"></i> Filtrar
-                    </button>
-                  </div>
-                  <div class="col-auto my-1">
-                    <ul
-                      class="pagination pagination-sm mb-0 justify-content-end"
-                    >
-                      <li class="page-item disabled">
-                        <a class="page-link" href="#">&laquo;</a>
-                      </li>
-                      <li class="page-item active">
-                        <a class="page-link" href="index.html">1</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="index-2.html">2</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="index-3.html">&raquo;</a>
-                      </li>
-                    </ul>
+                    <laravel-paginacion :pages="pages"></laravel-paginacion>
                   </div>
                 </div>
               </div>
@@ -116,7 +79,7 @@
                   <div class="col-auto my-1">
                     <label
                       >Mostrando
-                      <select class="custom-select custom-select-sm mx-1">
+                      <select class="custom-select custom-select-sm mx-1" v-model="perPage">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -129,27 +92,7 @@
               <div class="col-sm-6 col-12">
                 <div class="form-row form-inline justify-content-end">
                   <div class="col-auto my-1">
-                    <button class="btn btn-primary btn-sm" href="#">
-                      <i class="bi bi-filter-circle"></i> Filtrar
-                    </button>
-                  </div>
-                  <div class="col-auto my-1">
-                    <ul
-                      class="pagination pagination-sm mb-0 justify-content-end"
-                    >
-                      <li class="page-item disabled">
-                        <a class="page-link" href="#">&laquo;</a>
-                      </li>
-                      <li class="page-item active">
-                        <a class="page-link" href="index.html">1</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="index-2.html">2</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="index-3.html">&raquo;</a>
-                      </li>
-                    </ul>
+                    <laravel-paginacion :pages="pages"></laravel-paginacion>
                   </div>
                 </div>
               </div>
@@ -158,62 +101,69 @@
         </div>
       </div>
     </div>
-
-    <!-- Button to Open the Modal -->
-    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-      Open modal
-    </button> -->
-
-    <!-- The Modal -->
-    <!-- <div class="modal fade" id="myModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title"><span class="text-warning"><i class="bi bi-shield-fill-exclamation"></i></span> Alerta</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-          <div class="modal-body">
-            ¿Realmente desea eliminar el registro?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Si, adelante</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
-import roles from "@/logic/roles";
+import $sun from "@/logic/$sun";
+import IndexHeader from '@/components/layouts/IndexHeader.vue';
+import LaravelPaginacion from "@/components/paginaciones/LaravelPaginacion";
 
 export default {
   name: "IndexRol",
+  components: {
+    LaravelPaginacion,
+    IndexHeader,
+  },
   data() {
     return {
       roles: [],
+      pages: [],
+      perPage: "10",
+      total: 0,
     };
   },
   mounted: function () {
-    this.indexRol();
+    this.indexRol(this.$route.query.page);
   },
   methods: {
-    indexRol() {
-      roles
-        .index()
-        .then((response) => (this.roles = response.roles))
+    indexRol(page) {
+      $sun
+        .ajax(
+          `http://localhost:8000/api/roles/?perpage=${this.perPage}&page=${page}`
+        )
+        .then((response) => {
+          this.roles = response.data;
+          this.pages = response.meta.links;
+          this.total = response.meta.total;
+          console.log(response);
+        })
         .catch((response) => console.log(response));
     },
     deleteRol(id) {
       if (confirm("¿Realmente desea eliminar el registro?")) {
-        roles
-          .delete(id)
+        $sun
+          .ajax(`http://localhost:8000/api/roles/${id}`, "DELETE")
           .then((response) => {
+            this.indexRol(this.$route.query.page);
             console.log(response);
-            this.indexRol();
           })
           .catch((response) => console.log(response));
+      }
+    },
+  },
+  watch: {
+    "$route.query.page": {
+      inmediate: true,
+      handler() {
+        this.indexRol(this.$route.query.page);
+      },
+    },
+    perPage() {
+      if (this.$route.query.page == undefined) {
+        this.indexRol(1);
+      } else {
+        this.$router.push({ name: "index-rol" });
       }
     },
   },

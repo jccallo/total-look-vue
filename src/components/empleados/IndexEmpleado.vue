@@ -1,28 +1,7 @@
 <template>
   <div class="container">
     <!-- cabecera -->
-    <div class="row align-items-center mb-2">
-      <div class="col-sm-6 col-12">
-        <div class="h3">
-          Empleados
-          <small class="text-muted" style="font-size: 14px; font-weight: 500"
-            >Mostrando {{ empleados.length }} resultados en Total</small
-          >
-        </div>
-      </div>
-      <div class="col-sm-6 col-12">
-        <div class="form-row form-inline justify-content-end">
-          <div class="col-auto my-1">
-            <router-link
-              :to="{ name: 'create-empleado' }"
-              class="btn btn-primary"
-            >
-              <i class="bi bi-plus-circle"></i> Registrar
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <index-header title="Empleados" :total="total" name="create-empleado"></index-header>
 
     <!-- cuerpo -->
     <div class="row">
@@ -35,7 +14,7 @@
                 <div class="form-row form-inline justify-content-start">
                   <div class="col-auto my-1">
                     <label
-                      >Mostrando
+                      >Mostrar
                       <select
                         class="custom-select custom-select-sm mx-1"
                         v-model="perPage"
@@ -52,11 +31,6 @@
               </div>
               <div class="col-sm-6 col-12">
                 <div class="form-row form-inline justify-content-end">
-                  <div class="col-auto my-1">
-                    <button class="btn btn-info btn-sm" href="#">
-                      <i class="bi bi-filter-circle"></i> Filtrar
-                    </button>
-                  </div>
                   <div class="col-auto my-1">
                     <laravel-paginacion :pages="pages"></laravel-paginacion>
                   </div>
@@ -71,8 +45,8 @@
                   <th scope="col">Apellido</th>
                   <th scope="col">Dni</th>
                   <th scope="col">Telefono</th>
+                  <th scope="col">Email</th>
                   <th scope="col">Estado</th>
-                  <th scope="col">Rol</th>
                   <th scope="col" class="text-right">Acciones</th>
                 </tr>
               </thead>
@@ -83,15 +57,19 @@
                   <td>{{ empleado.apellido }}</td>
                   <td>{{ empleado.dni }}</td>
                   <td>{{ empleado.telefono }}</td>
+                  <td>{{ empleado.email }}</td>
                   <td>{{ empleado.estado }}</td>
-                  <td>{{ empleado.rol }}</td>
                   <td class="text-right">
                     <div style="width: 105px; display: inline-block">
-                      <!-- <a
-                        href="detalles.html"
+                      <router-link
+                        :to="{
+                          name: 'show-empleado',
+                          params: { id: empleado.id },
+                        }"
                         class="btn btn-secondary btn-sm mr-1"
-                        ><i class="bi bi-eye"></i
-                      ></a> -->
+                      >
+                        <i class="bi bi-eye"></i>
+                      </router-link>
                       <router-link
                         :to="{
                           name: 'edit-empleado',
@@ -103,8 +81,6 @@
                       </router-link>
                       <a
                         class="btn btn-danger btn-sm"
-                        data-toggle="modal"
-                        data-target="#myModal"
                         @click="deleteEmpleado(empleado.id)"
                         ><i class="bi bi-trash"></i
                       ></a>
@@ -118,7 +94,7 @@
                 <div class="form-row form-inline justify-content-start">
                   <div class="col-auto my-1">
                     <label
-                      >Mostrando
+                      >Mostrar
                       <select
                         class="custom-select custom-select-sm mx-1"
                         v-model="perPage"
@@ -135,11 +111,6 @@
               </div>
               <div class="col-sm-6 col-12">
                 <div class="form-row form-inline justify-content-end">
-                  <div class="col-auto my-1">
-                    <button class="btn btn-info btn-sm" href="#">
-                      <i class="bi bi-filter-circle"></i> Filtrar
-                    </button>
-                  </div>
                   <div class="col-auto my-1">
                     <laravel-paginacion :pages="pages"></laravel-paginacion>
                   </div>
@@ -155,18 +126,21 @@
 
 <script>
 import $sun from "@/logic/$sun";
+import IndexHeader from '@/components/layouts/IndexHeader.vue';
 import LaravelPaginacion from "@/components/paginaciones/LaravelPaginacion";
 
 export default {
   name: "IndexEmpleado",
   components: {
     LaravelPaginacion,
+    IndexHeader,
   },
   data() {
     return {
       empleados: [],
       pages: [],
-      perPage: "5",
+      perPage: "10",
+      total: 0,
     };
   },
   mounted: function () {
@@ -184,6 +158,7 @@ export default {
         .then((response) => {
           this.empleados = response.data;
           this.pages = response.meta.links;
+          this.total = response.meta.total;
           console.log(response);
         })
         .catch((response) => console.log(response));
@@ -209,7 +184,6 @@ export default {
     },
     perPage() {
       if (this.$route.query.page == undefined) {
-        console.log(true)
         this.indexEmpleado(1);
       } else {
         this.$router.push({ name: "index-empleado" });
@@ -218,5 +192,3 @@ export default {
   },
 };
 </script>
-
-
