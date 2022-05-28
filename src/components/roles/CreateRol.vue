@@ -12,15 +12,15 @@
             <form @submit.prevent="createRol">
               <div class="form-group">
                 <label>Nombre:</label>
-                <input type="text" class="form-control" v-model="rol.nombre" required />
+                <input type="text" class="form-control" v-model="rolForm.nombre" name="nombre" required />
               </div>
               <div class="form-group">
                 <label>Descripcion</label>
-                <input type="text" class="form-control" v-model="rol.descripcion" required />
+                <input type="text" class="form-control" v-model="rolForm.descripcion" name="descripcion" required />
               </div>
               <div class="form-group">
                 <label>Estado:</label>
-                <select class="custom-select" v-model="rol.estado" required>
+                <select class="custom-select" v-model="rolForm.estado" name="estado" required>
                   <option value="activo">Activo</option>
                   <option value="eliminado">Eliminado</option>
                 </select>
@@ -37,8 +37,9 @@
 </template>
 
 <script>
-import $sun from "@/logic/$sun";
+// import $sun from "@/logic/$sun";
 import ShowHeader from '@/components/layouts/ShowHeader.vue';
+import Form from 'vform';
 
 export default {
   name: "CreateRol",
@@ -47,22 +48,30 @@ export default {
   },
   data() {
     return {
-      rol: {
+      rolForm: new Form({
         nombre: "",
         descripcion: "",
         estado: "activo",
-      },
+      }),
+      // rol: {
+      //   nombre: "",
+      //   descripcion: "",
+      //   estado: "activo",
+      // },
     };
   },
   methods: {
     createRol() {
-      $sun
-        .ajax(`http://localhost:8000/api/roles`, "POST", this.rol)
-        .then((response) => {
-          this.$router.push({ name: "index-rol" });
-          console.log(response);
-        })
-        .catch((response) => console.log(response));
+      this.rolForm.post("http://localhost:8000/api/roles").then(({data}) => {
+        console.log(data)
+      });
+      // $sun
+      //   .ajax(`http://localhost:8000/api/roles`, "POST", this.rol)
+      //   .then((response) => {
+      //     this.$router.push({ name: "index-rol" });
+      //     console.log(response);
+      //   })
+      //   .catch((response) => console.log(response));
     },
   },
 };

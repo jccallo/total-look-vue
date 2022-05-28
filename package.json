@@ -13,6 +13,7 @@
     "bootstrap": "^4.6.1",
     "core-js": "^3.8.3",
     "jquery": "^3.5.1",
+    "object-to-formdata": "^3.0.9",
     "popper.js": "^1.16.1",
     "sweetalert2": "^11.4.14",
     "vform": "^2.1.2",
