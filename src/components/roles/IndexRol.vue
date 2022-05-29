@@ -105,7 +105,6 @@
 </template>
 
 <script>
-import $sun from "@/logic/$sun";
 import IndexHeader from '@/components/layouts/IndexHeader.vue';
 import LaravelPaginacion from "@/components/paginaciones/LaravelPaginacion";
 
@@ -128,22 +127,28 @@ export default {
   },
   methods: {
     indexRol(page) {
-      $sun
-        .ajax(
-          `http://localhost:8000/api/roles/?perpage=${this.perPage}&page=${page}`
-        )
+      this.axios
+        .get(`http://localhost:8000/api/roles?perpage=${this.perPage}&page=${page}`)
         .then((response) => {
-          this.roles = response.data;
-          this.pages = response.meta.links;
-          this.total = response.meta.total;
-          console.log(response);
+            const {
+              data: {
+                  data: roles,
+                  meta: { links: pages, total, last_page },
+              },
+            } = response;
+            this.roles = roles;
+            this.pages = pages;
+            this.total = total;
+            if (last_page < this.$route.query.page)
+              this.$router.push({ name: "index-rol"});
+            console.log(response)
         })
         .catch((response) => console.log(response));
     },
     deleteRol(id) {
       if (confirm("¿Realmente desea eliminar el registro?")) {
-        $sun
-          .ajax(`http://localhost:8000/api/roles/${id}`, "DELETE")
+        this.axios
+          .delete(`http://localhost:8000/api/roles/${id}`)
           .then((response) => {
             this.indexRol(this.$route.query.page);
             console.log(response);
@@ -155,8 +160,8 @@ export default {
   watch: {
     "$route.query.page": {
       inmediate: true,
-      handler() {
-        this.indexRol(this.$route.query.page);
+      handler(page) {
+        this.indexRol(page);
       },
     },
     perPage() {

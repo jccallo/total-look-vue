@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // variables globales
 Vue.prototype.axios = axios; // sin usar vue-axios
-window.$ = window.jQuery = require("jquery");
+window.$ = window.jQuery = require("jquery"); // jquery pero solo funciona window.jquery
 
 // import VueSweetalert2 from 'vue-sweetalert2'
 
@@ -17,7 +17,7 @@ window.$ = window.jQuery = require("jquery");
 // estara disponible de manera global
 // Vue.use(VueSweetalert2);
 
-// vue
+// default
 Vue.config.productionTip = false;
 
 new Vue({

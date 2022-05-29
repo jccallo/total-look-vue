@@ -9,10 +9,10 @@
         <div class="card mb-4">
           <!-- card body -->
           <div class="card-body table-responsive">
-            <form @submit.prevent="editRol(rol.id)">
+            <form @submit.prevent="editRol(id)">
               <div class="form-group">
                 <label>Id:</label>
-                <input type="text" class="form-control" v-model="rol.id" disabled />
+                <input type="text" class="form-control" v-model="id" disabled />
               </div>
               <div class="form-group">
                 <label>Nombre:</label>
@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import $sun from "@/logic/$sun";
 import ShowHeader from '@/components/layouts/ShowHeader.vue';
 
 export default {
@@ -52,11 +51,11 @@ export default {
   data() {
     return {
       rol: {
-        id: "",
         nombre: "",
         descripcion: "",
         estado: "",
       },
+      id: "",
     };
   },
   mounted: function () {
@@ -64,22 +63,24 @@ export default {
   },
   methods: {
     showRol(id) {
-      $sun
-        .ajax(`http://localhost:8000/api/roles/${id}`)
+      this.axios
+        .get(`http://localhost:8000/api/roles/${id}`)
         .then((response) => {
-          this.rol = response.data;
+          this.rol.nombre = response.data.data.nombre;
+          this.rol.descripcion = response.data.data.descripcion;
+          this.rol.estado = response.data.data.estado;
+          this.id = response.data.data.id;
           console.log(response);
         })
         .catch((response) => console.log(response));
     },
     editRol(id) {
-      $sun
-        .ajax(`http://localhost:8000/api/roles/${id}`, "PUT", this.rol)
-        .then((response) => {
-          this.$router.push({ name: "show-rol", params: { id: id } });
-          console.log(response);
-        })
-        .catch((response) => console.log(response));
+      this.axios.put(`http://localhost:8000/api/roles/${id}`, this.rol)
+      .then((response) => {
+        this.$router.push({ name: "show-rol", params: { id: id } });
+        console.log(response);
+      })
+      .catch((response) => console.log(response));
     },
   },
 };

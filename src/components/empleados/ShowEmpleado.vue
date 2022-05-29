@@ -117,8 +117,6 @@
 </template>
 
 <script>
-// import empleados from "@/logic/empleados";
-import $sun from "@/logic/$sun";
 import ShowHeader from '@/components/layouts/ShowHeader.vue';
 
 export default {
@@ -141,19 +139,29 @@ export default {
         password: "",
         rol_id: "",
       },
-      roles: [],
+      roles: {},
     };
   },
   mounted: function () {
+    this.createEmpleado();
     this.showEmpleado(this.$route.params.id);
   },
   methods: {
-    showEmpleado(id) {
-      $sun
-        .ajax(`http://localhost:8000/api/empleados/${id}`)
+    createEmpleado() {
+      this.axios
+        .get("http://localhost:8000/api/empleados/crear")
         .then((response) => {
-          this.empleado = response.data;
-          this.roles = response.roles;
+            this.roles = response.data.data.roles;
+            console.log(response);
+        })
+        .catch((response) => console.log(response));
+    },
+    showEmpleado(id) {
+      this.axios
+        .get(`http://localhost:8000/api/empleados/${id}`)
+        .then((response) => {
+          this.empleado = response.data.data
+          console.log(response);
         })
         .catch((response) => console.log(response));
     },

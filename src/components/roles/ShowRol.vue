@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import $sun from "@/logic/$sun";
 import ShowHeader from '@/components/layouts/ShowHeader.vue';
 
 export default {
@@ -56,10 +55,10 @@ export default {
   },
   methods: {
     showRol(id) {
-      $sun
-        .ajax(`http://localhost:8000/api/roles/${id}`)
+      this.axios
+        .get(`http://localhost:8000/api/roles/${id}`)
         .then((response) => {
-          this.rol = response.data;
+          this.rol = response.data.data;
         })
         .catch((response) => console.log(response));
     },
