@@ -4,10 +4,20 @@ import router from "./router";
 import axios from "axios";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import NavBar from "@/components/layouts/NavBar.vue";
 
 // variables globales
 Vue.prototype.axios = axios; // sin usar vue-axios
 window.$ = window.jQuery = require("jquery"); // jquery pero solo funciona window.jquery
+
+// persistencia de token
+let token = localStorage.getItem("token");
+if (token) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+}
+
+// componentes globales
+Vue.component('NavBar', NavBar)
 
 // import VueSweetalert2 from 'vue-sweetalert2'
 
